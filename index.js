@@ -3,6 +3,8 @@ var winningWord = '';
 var currentRow = 1;
 var guess = '';
 var gamesPlayed = [];
+var guesses = []
+var words
 
 // Query Selectors
 var inputs = document.querySelectorAll('input');
@@ -21,7 +23,7 @@ var gameOverGuessCount = document.querySelector('#game-over-guesses-count');
 var gameOverGuessGrammar = document.querySelector('#game-over-guesses-plural');
 
 // Event Listeners
-window.addEventListener('load', setGame);
+window.addEventListener('load', fetchWords);
 
 for (var i = 0; i < inputs.length; i++) {
   inputs[i].addEventListener('keyup', function() { moveToNextInput(event) });
@@ -44,20 +46,19 @@ function fetchWords() {
   fetch('http://localhost:3001/api/v1/words')
     .then(response => response.json())
     .then(data => {
-      console.log(data)
-      return data
+      words = data
+      setGame()
     })
 }
 
 function setGame() {
-  fetchWords()
   currentRow = 1;
   winningWord = getRandomWord();
   updateInputPermissions();
 }
 
 function getRandomWord() {
-  var randomIndex = Math.floor(Math.random() * 2500);
+  var randomIndex = Math.floor(Math.random() * words.length);
   return words[randomIndex];
 }
 
@@ -139,7 +140,6 @@ function compareGuess() {
       updateKeyColor(guessLetters[i], 'wrong-key');
     }
   }
-
 }
 
 function updateBoxColor(letterLocation, className) {
@@ -168,11 +168,6 @@ function updateKeyColor(letter, className) {
 
 function checkForWin() {
   return guess === winningWord;
-}
-
-function changeRow() {
-  currentRow++;
-  updateInputPermissions();
 }
 
 function declareWinner() {
