@@ -170,12 +170,20 @@ function checkForWin() {
   return guess === winningWord;
 }
 
+function changeRow() {
+  if(currentRow < 6) {  
+    currentRow++
+    updateInputPermissions();
+  }
+}
+
 function declareWinner() {
   recordGameStats();
   changeGameOverText();
   viewGameOverMessage();
   setTimeout(startNewGame, 4000);
 }
+
 
 function recordGameStats() {
   gamesPlayed.push({ solved: true, guesses: currentRow });
