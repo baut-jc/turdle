@@ -173,20 +173,25 @@ function checkForWin() {
 function changeRow() {
   if(currentRow < 6) {  
     currentRow++
-    updateInputPermissions();
+    updateInputPermissions()
+  } else {
+    recordGameStats(false)
+    errorMessage.innerText = 'Not the correct word! Try Again!'
+    setTimeout(startNewGame, 4000)
   }
 }
 
+
 function declareWinner() {
-  recordGameStats();
+  recordGameStats(true);
   changeGameOverText();
   viewGameOverMessage();
   setTimeout(startNewGame, 4000);
 }
 
 
-function recordGameStats() {
-  gamesPlayed.push({ solved: true, guesses: currentRow });
+function recordGameStats(solved) {
+  gamesPlayed.push({ solved, guesses: currentRow });
 }
 
 function changeGameOverText() {
